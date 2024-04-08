@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Quiz</title>
+    <style>
+      /* Add your CSS styles here */
+    </style>
+  </head>
+  <body>
+    <div id="quiz-container">
+      <div id="question"></div>
+      <div id="options"></div>
+      <button id="submit-btn">Submit Answer</button>
+      <div id="feedback"></div>
+    </div>
+
+    <script>
+      // Quiz data
+      const quizQuestions = [
+        {
+          question: "What is the capital of France?",
+          options: ["Paris", "London", "Rome", "Berlin"],
+          answer: "Paris",
+        },
+        {
+          question: "Which planet is known as the Red Planet?",
+          options: ["Mars", "Venus", "Jupiter", "Saturn"],
+          answer: "Mars",
+        },
+        // Add more questions as needed
+      ];
+
+      // Global variables
+      let currentQuestionIndex = 0;
+      let score = 0;
+
+      // Function to load next question
+      function loadNextQuestion() {
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+
+        // Display question
+        questionElement.textContent = currentQuestion.question;
+
+        // Display options
+        optionsElement.innerHTML = "";
+        currentQuestion.options.forEach((option) => {
+          const optionElement = document.createElement("div");
+          optionElement.textContent = option;
+          optionElement.classList.add("option");
+          optionElement.addEventListener("click", () => {
+            evaluateAnswer(option);
+          });
+          optionsElement.appendChild(optionElement);
+        });
+      }
+
+      // Function to evaluate answer
+      function evaluateAnswer(selectedOption) {
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+
+        if (selectedOption === currentQuestion.answer) {
+          score++;
+          document.getElementById("feedback").textContent = "Correct!";
+        } else {
+          document.getElementById("feedback").textContent = "Incorrect!";
+        }
+
+        // Move to the next question
+        currentQuestionIndex++;
+
+        // Check if quiz is finished
+        if (currentQuestionIndex < quizQuestions.length) {
+          loadNextQuestion();
+        } else {
+          // Display final score
+          document.getElementById("quiz-container").innerHTML = `
+            <h2>Quiz Completed!</h2>
+            <p>Your score: ${score}/${quizQuestions.length}</p>
+        `;
+        }
+      }
+
+      // Event listener for submit button
+      document.getElementById("submit-btn").addEventListener("click", () => {
+        document.getElementById("feedback").textContent = ""; // Clear previous feedback
+      });
+
+      // Start the quiz
+      loadNextQuestion();
+    </script>
+  </body>
+</html>
